@@ -34,17 +34,30 @@ namespace SteamRecentUsers
 
         public static async Task AddUser(User user)
         {
-            while (!user.IsPresent)
+            var t = DateTime.UtcNow;
+            try
             {
-                await Task.Delay(1000);
-            }
-
-            if (user.Metadata.TryGetElement("SteamID", out var steamIdData))
-            {
-                if (steamIdData.TryGetValue<ulong>(out var steamId))
+                while (!user.IsPresent)
                 {
-                    SteamFriends.SetPlayedWith(new CSteamID(steamId));
+                    if (DateTime.UtcNow - t > TimeSpan.FromSeconds(90))
+                        return;
+                    await Task.Delay(1000);
                 }
+
+                if (user.MediaMetadataOptOut)
+                    return;
+
+                if (user.Metadata.TryGetElement("SteamID", out var steamIdData))
+                {
+                    if (steamIdData.TryGetValue<ulong>(out var steamId))
+                    {
+                        SteamFriends.SetPlayedWith(new CSteamID(steamId));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Warn("Error adding user: " + ex.Message);
             }
         }
 
