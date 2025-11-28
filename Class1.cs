@@ -14,8 +14,8 @@ namespace SteamRecentUsers
     {
         public override string Name => "SteamRecentUsers";
         public override string Author => "Dante";
-        public override string Version => "1.0.0";
-        public override string Link => "https://github.com/YourNameHere/SteamRecentUsers"; 
+        public override string Version => "1.0.1";
+        public override string Link => "https://github.com/DanteTucker/SteamRecentUsers"; 
 
         public override void OnEngineInit()
         {
